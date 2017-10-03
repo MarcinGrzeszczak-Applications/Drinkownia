@@ -3,6 +3,7 @@ package com.martiproduction.drinkownia.UI;
 import android.Manifest;
 import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -26,6 +27,11 @@ public class AddRecipe extends AppCompatActivity {
     private boolean mCameraPermissionGranted, mReadPermissionGranted;
     private FragmentTransaction fragmentTransaction;
 
+    private AddRecipePicture mAddRecipePicture;
+    private PickingImage mPickingImage;
+
+    private Bitmap mPickedBitmapPicture;
+
     @BindView(R.id.addRecipe_toolbar)
     Toolbar mAddRecipeToolbar;
 
@@ -44,7 +50,7 @@ public class AddRecipe extends AppCompatActivity {
             }
        }
 
-       fragmentInit();
+       fragmentsInit();
     }
 
     @Override
@@ -63,32 +69,58 @@ public class AddRecipe extends AppCompatActivity {
             if(!mCameraPermissionGranted || !mReadPermissionGranted )
                 requestPermissions(new String[] {Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE},PERMISSIONS);
             else
-                fragmentInit();
+                fragmentsInit();
         }
     }
 
-    private void fragmentInit(){
+    private void fragmentsInit(){
+
+        mAddRecipePicture = new AddRecipePicture();
+        mPickingImage = new PickingImage();
+
+        initAddRecipePictureFragment();
+    }
+
+
+    private void initAddRecipePictureFragment(){
+
+        fragmentTransaction = getFragmentManager().beginTransaction();
+        mAddRecipePicture.setPickingImageListener(pickingImageListener);
+        mAddRecipePicture.cameraPermission(mCameraPermissionGranted);
+
+        if(mPickedBitmapPicture != null){
+            mAddRecipePicture.setBitmapPreview(mPickedBitmapPicture);
+        }
+
+        fragmentTransaction.replace(CONTAINER,mAddRecipePicture);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    private void initPickingImageFragment(){
+
         fragmentTransaction = getFragmentManager().beginTransaction();
 
-        AddRecipePicture addRecipePicture = new AddRecipePicture();
-        addRecipePicture.setPickingImageListener(pickingImageListener);
-        addRecipePicture.cameraPermission(mCameraPermissionGranted);
+        mPickingImage.readPermissions(mReadPermissionGranted);
+        mPickingImage.setListener(pickingImageListener);
 
-        fragmentTransaction.add(CONTAINER,addRecipePicture);
-
+        fragmentTransaction.replace(CONTAINER,mPickingImage);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
     private PickingImage.Listener pickingImageListener = new PickingImage.Listener() {
         @Override
         public void buttonClicked() {
-            fragmentTransaction = getFragmentManager().beginTransaction();
-            PickingImage pickingImage = new PickingImage();
-            pickingImage.readPermissions(mReadPermissionGranted);
-            fragmentTransaction.replace(CONTAINER,pickingImage);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            initPickingImageFragment();
         }
+
+        @Override
+        public void close(Bitmap picture) {
+            mPickedBitmapPicture = picture;
+            initAddRecipePictureFragment();
+        }
+
     };
 }
 

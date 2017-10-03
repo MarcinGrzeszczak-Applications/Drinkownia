@@ -10,6 +10,7 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
+import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.Build;
 import android.os.Handler;
@@ -53,6 +54,18 @@ public class CameraV2 {
         stopCameraHandler();
     }
 
+
+    public void takePicture(){
+        try {
+            mCameraDevice.createCaptureSession(Collections.singletonList(mPreviewSurface),captureSessionCallback,mCameraHandler);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deletePicture(){
+        createPreview();
+    }
 
     private void startCameraHandler() {
         mCameraHandlerThread = new HandlerThread("CameraHandlerV2");
@@ -147,6 +160,26 @@ public class CameraV2 {
         }
     };
 
+    private CameraCaptureSession.StateCallback captureSessionCallback = new CameraCaptureSession.StateCallback() {
+        @Override
+        public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
+
+            try {
+                CaptureRequest.Builder captureRequest = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
+                cameraCaptureSession.capture(captureRequest.build(),null,null);
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+        @Override
+        public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
+
+        }
+    };
+
     private void setupCamera() {
         CameraManager cameraManager = (CameraManager) mActivity.getSystemService(Context.CAMERA_SERVICE);
 
@@ -189,6 +222,7 @@ public class CameraV2 {
             e.printStackTrace();
         }
 
-
     }
+
+
 }

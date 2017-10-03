@@ -1,6 +1,8 @@
 package com.martiproduction.drinkownia.Fragments;
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,9 +21,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-/**
- * Created by marcin on 13.07.2017.
- */
 
 public class AddRecipePicture extends Fragment implements RecipePictureListener{
 
@@ -31,6 +30,7 @@ public class AddRecipePicture extends Fragment implements RecipePictureListener{
     private View mView;
     private CameraV2 mCameraV2;
     private PickingImage.Listener mPickingImageListener;
+    private Bitmap mPickedBitmapPreview;
 
     @BindView(R.id.addPicture_circlePreview)
     TextureView circlePreview;
@@ -70,7 +70,13 @@ public class AddRecipePicture extends Fragment implements RecipePictureListener{
     //    mPopupTitle = new PopupTitle(getActivity().getApplicationContext(),mView);
         mView.post(() -> {
       //      mPopupTitle.show(getString(R.string.addDrink_add_picture),5);
-            openCamera(mCameraPermissionGranted);
+            if(mPickedBitmapPreview !=null){
+                Canvas canvas = circlePreview.lockCanvas();
+                canvas.drawBitmap(mPickedBitmapPreview,0f,0f,null);
+                circlePreview.draw(canvas);
+            }
+            else
+                openCamera(mCameraPermissionGranted);
 
         });
 
@@ -78,6 +84,10 @@ public class AddRecipePicture extends Fragment implements RecipePictureListener{
 
     public void cameraPermission(boolean permission){
         mCameraPermissionGranted = permission;
+    }
+
+    public void setBitmapPreview(Bitmap preview){
+        mPickedBitmapPreview = preview;
     }
 
     public void setPickingImageListener(PickingImage.Listener pickingImageListener) {
@@ -90,6 +100,11 @@ public class AddRecipePicture extends Fragment implements RecipePictureListener{
         mPickingImageListener.buttonClicked();
     }
 
+    @OnClick(R.id.addPicture_takePictureButton)
+    public void takePictureButton() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            mCameraV2.takePicture();
+    }
 
     private void openCamera(boolean permission){
         if (!permission){

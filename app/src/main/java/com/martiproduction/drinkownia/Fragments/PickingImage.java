@@ -5,13 +5,13 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,26 +19,24 @@ import android.view.ViewGroup;
 import com.martiproduction.drinkownia.CustomViews.PickingImageAdapter;
 import com.martiproduction.drinkownia.R;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * Created by marcin on 20.09.2017.
- */
 
-public class PickingImage extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
-
+public class PickingImage extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,PickingImageAdapter.OnCLickListener{
 
     public interface Listener {
         void buttonClicked();
+        void close(Bitmap picture);
     }
 
     private Unbinder bind;
     private boolean mReadPermission;
     private PickingImageAdapter mPickingImageAdapter;
+    private Listener mListener;
 
     @BindView(R.id.pickingImage_recyclerView)
     RecyclerView mPickingRecycler;
@@ -55,7 +53,7 @@ public class PickingImage extends Fragment implements LoaderManager.LoaderCallba
         mPickingRecycler.setLayoutManager(layoutManager);
 
         if(mReadPermission) {
-             mPickingImageAdapter = new PickingImageAdapter();
+             mPickingImageAdapter = new PickingImageAdapter(this,mPickingRecycler);
              mPickingRecycler.setAdapter(mPickingImageAdapter);
              getLoaderManager().initLoader(0,null,this);
         }
@@ -65,7 +63,7 @@ public class PickingImage extends Fragment implements LoaderManager.LoaderCallba
     public void readPermissions(boolean premission){
         mReadPermission = premission;
     }
-
+    public void setListener (Listener listener) {mListener = listener;}
 
     @Override
     public void onDestroy() {
@@ -93,4 +91,17 @@ public class PickingImage extends Fragment implements LoaderManager.LoaderCallba
     }
 
 
+    @Override
+    public void getClickedPicture(Uri uri) {
+
+        try {
+            Bitmap bitmapPicture = MediaStore.Images.Media.getBitmap(PickingImage.this.getActivity().getContentResolver(),Uri.parse(uri));
+            mListener.close(bitmapPicture);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

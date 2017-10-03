@@ -3,9 +3,8 @@ package com.martiproduction.drinkownia.CustomViews;
 import android.content.Context;
 import android.database.Cursor;
 import android.media.ExifInterface;
-import android.provider.MediaStore;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,33 +15,46 @@ import com.bumptech.glide.request.RequestOptions;
 import com.martiproduction.drinkownia.R;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-/**
- * Created by marcin on 20.09.2017.
- */
 
 public class PickingImageAdapter extends RecyclerView.Adapter<PickingImageAdapter.PickingImageHolder> {
 
+    public interface OnCLickListener{
+        void getClickedPicture(Uri uri);
+    }
+
     private Cursor mCursor;
     private Context mContext;
+    private  RecyclerView mRecyclerView;
+    private OnCLickListener mListener;
 
     class PickingImageHolder extends RecyclerView.ViewHolder {
         ImageView image;
 
-        public PickingImageHolder(View itemView) {
+         PickingImageHolder(View itemView) {
             super(itemView);
             image = (ImageView) itemView.findViewById(R.id.adapter_pickingImage_image);
         }
     }
 
-    public PickingImageAdapter() {}
+    public PickingImageAdapter(OnCLickListener listener,RecyclerView recyclerView) {
+       mListener = listener;
+       mRecyclerView = recyclerView;
+    }
 
 
     @Override
     public PickingImageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_picking_image,parent,false);
+
+        if(mListener != null && mContext != null) {
+            view.setOnClickListener(l -> {
+                mCursor.moveToPosition(mRecyclerView.getChildAdapterPosition(l));
+                mListener.getClickedPicture(mCursor.getString(0));
+            });
+        }
+
         return new PickingImageHolder(view);
     }
 

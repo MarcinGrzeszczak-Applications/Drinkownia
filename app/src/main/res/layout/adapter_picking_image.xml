@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" >
+
     <ImageView
         android:id="@+id/adapter.pickingImage.image"
         android:layout_width="wrap_content"
@@ -10,4 +11,4 @@
         android:layout_margin="1dp"
         android:adjustViewBounds="true"/>
 
-</RelativeLayout>
+</android.support.v7.widget.CardView>
