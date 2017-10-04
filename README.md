@@ -25,20 +25,23 @@ Application where users can upload own version of drinks and shots and rest of c
  
    ### 2.2.1 Alternate view of login activity
    
-   [GIF]
+   ![](https://raw.githubusercontent.com/MarcinGrzeszczak-Applications/Drinkownia/master/screenshots/alternate_Layout_Login.gif)
+
    
    
 
 ## 2.3 Main activity
 
-   [GIF]
+![](https://raw.githubusercontent.com/MarcinGrzeszczak-Applications/Drinkownia/master/screenshots/main_Activity.gif)
+
    
    
    
   ###  2.3.1 Navigation Drawer
   
-  [GIF]
   
+  ![](https://raw.githubusercontent.com/MarcinGrzeszczak-Applications/Drinkownia/master/screenshots/nav_Drawer.gif)
+
   
 
 ## 2.4 Adding new recipe
@@ -46,7 +49,21 @@ Application where users can upload own version of drinks and shots and rest of c
 
   ### 2.4.1 Take or select picture
   
-  [GIF]
+  Taking picture.
+  
+  ![](https://raw.githubusercontent.com/MarcinGrzeszczak-Applications/Drinkownia/master/screenshots/take_Photo.png)
+
+  
+  
+  Selecting picture.
+  Coustom list of images from gallery created on RecyclerView with Staggered Layout.
+  
+  ![](https://raw.githubusercontent.com/MarcinGrzeszczak-Applications/Drinkownia/master/screenshots/select_Photo.png)
+
    
-   
+# 3. External Libraries
+  External libraries used in this project :
+  * ButterKnife
+  * Glide
+  * CircleImageView
   
