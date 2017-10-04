@@ -13,3 +13,6 @@ Application where users can upload own version of drinks and shots and rest of c
   Bubbles animation created programmatically.
   
   
+   ![](https://raw.githubusercontent.com/MarcinGrzeszczak-Applications/Drinkownia/master/screenshots/Hello_Activity.gif)
+
+  
