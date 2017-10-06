@@ -42,12 +42,15 @@ Application where users can upload own version of drinks and shots and rest of c
   
   ![](https://raw.githubusercontent.com/MarcinGrzeszczak-Applications/Drinkownia/master/screenshots/nav_Drawer.gif)
 
-  
 
-## 2.4 Adding new recipe
+## 2.5 Drink recipe
+![](https://raw.githubusercontent.com/MarcinGrzeszczak-Applications/Drinkownia/master/screenshots/nav_Drawer.gif)
 
 
-  ### 2.4.1 Take or select picture
+## 2.6 Adding new recipe
+
+
+  ### 2.6.1 Take or select picture
   
   Taking picture.
   
