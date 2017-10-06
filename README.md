@@ -44,7 +44,7 @@ Application where users can upload own version of drinks and shots and rest of c
 
 
 ## 2.5 Drink recipe
-![](https://raw.githubusercontent.com/MarcinGrzeszczak-Applications/Drinkownia/master/screenshots/nav_Drawer.gif)
+![](https://raw.githubusercontent.com/MarcinGrzeszczak-Applications/Drinkownia/master/screenshots/drink_Recipe.gif)
 
 
 ## 2.6 Adding new recipe
